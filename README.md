@@ -1,7 +1,5 @@
 # SolarSprint: Scheduling AI Computing on California's Wasted Solar Power
 
-Penn Engineering Senior Design (Team 22), 2026–27, advised by Prof. Benjamin C. Lee, with input from Prof. Le Xie's lab at Harvard. **Work in progress.**
-
 ## The problem
 
 California throws away ("curtails") solar power it can't move, about 3.4 TWh in 2024, mostly because of local transmission congestion. Prof. Lee's report *Curtail to Compute* (Next 10, March 2026) proposes a 20 MW data center near Fresno that runs AI computing on that wasted power, backed by a battery and a limited grid connection.
@@ -26,4 +24,4 @@ Every number is from our own simulation and is reproducible with one command in 
 - On-time guarantees that stay reliable on new workloads
 - A senior thesis built on the strongest result
 
-The code lives in a private repository. Happy to walk through the work on request.
+The code lives in a private repository. Happy to walk through the work on request. Advised by Prof. Benjamin C. Lee, with input from Prof. Le Xie's lab at Harvard. Work in progress.
