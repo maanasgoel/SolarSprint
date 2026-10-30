@@ -24,4 +24,4 @@ Every number is from our own simulation and is reproducible with one command in 
 - On-time guarantees that stay reliable on new workloads
 - A senior thesis built on the strongest result
 
-The code lives in a private repository. Happy to walk through the work on request. Advised by Prof. Benjamin Lee, and Prof. Le Xie's lab at Harvard. Work in progress.
+The code lives in a private repository. Happy to walk through the work on request. Advised by Prof. Benjamin Lee at Penn, and Prof. Le Xie's lab at Harvard. Work in progress.
