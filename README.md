@@ -1,27 +1,61 @@
-# SolarSprint: Scheduling AI Computing on California's Wasted Solar Power
+# SolarSprint
+
+**Operating an AI data center on California's curtailed solar power.**
 
 ## The problem
 
-California throws away ("curtails") solar power it can't move, about 3.4 TWh in 2024, mostly because of local transmission congestion. Prof. Lee's report *Curtail to Compute* (Next 10, March 2026) proposes a 20 MW data center near Fresno that runs AI computing on that wasted power, backed by a battery and a limited grid connection.
+California curtailed about 3.4 TWh of solar generation in 2024 because the grid could not deliver it
+to customers. AI computing could use that energy, but AI hardware is too expensive to sit idle
+whenever the surplus stops, and grid connections large enough to back it up are scarce and slow to
+obtain.
 
-## What we're building
+## Our approach
 
-Scheduling software for that site's operator. Customers buy compute in three service tiers: urgent (start now), standard (within 24 hours), and flexible (within 7 days). Every hour, the scheduler decides which jobs run and whether their power comes from curtailed solar, the battery, or the grid. When a job arrives, it accepts it, refuses it, or offers a later, cheaper deadline.
+We study the site proposed in the report *Curtail to Compute* (Next 10, 2026): a 20 MW AI data center
+near Fresno that runs on curtailed solar, a 10 MW / 40 MWh battery and a grid connection of only
+10 MW, half the size of its load. Customers buy computing in three service tiers according to how
+long they can wait: immediately, within a day, or within a week.
 
-## Results so far (simulated)
+We built the software that operates this site. Every hour, an optimizer plans the next 14 days
+against 20 possible solar forecasts. It decides which jobs to accept, when each job runs, and whether
+its power comes from solar, the battery or the grid. It accepts only the work it can finish on time.
 
-- **Real AI workloads:** on held-out Alibaba GPU job traces across four seasons, our three-tier operator completed **95.9% of the work vs. 31.6%** for the report's three-tier rule, with the same solar, battery, and grid. The whole gap comes from the flexible tier, which our operator keeps on time by buying grid power when needed.
-- **Economics:** about **$10.3M per year** more electricity margin than the report's rule, and the most financeable policy we tested, though it still needs higher prices than the base menu to cover the site's loans (GPU costs excluded).
-- **Uncertain solar:** hedging across solar forecast scenarios raised completed work to **97.9%**, at a higher electricity cost.
-- **Site sizing:** under our assumptions, a 20 MW grid connection with no battery was the best setup in every fresh test. That result depends heavily on the grid fee, and we're re-checking it with the real utility tariff.
+## Results so far
 
-Every number is from our own simulation and is reproducible with one command in the project repo. These are research results, not measurements from an operating site.
+We test the optimizer in full-year simulations that use real AI job traces, CAISO market prices and
+the PG&E tariff. Its settings were chosen on 2023 and then frozen. The results below are for 2024 and
+2025, two years it had not seen.
 
-## What's next
+| Operator | Work finished, 2024 | Work finished, 2025 | Accepted work finished on time |
+|---|---:|---:|---:|
+| Our optimizer | 91.3% | 91.8% | 100% |
+| Our best rule-based operator | 86.1% | 85.0% | 87% |
+| The tier design sketched in the report | 36.1% | 37.1% | 36 to 37% |
 
-- Re-run site sizing with the real PG&E demand charges
-- Pricing and service rules that keep customers honest about deadlines and cover the site's costs
-- On-time guarantees that stay reliable on new workloads
-- A senior thesis built on the strongest result
+Three conclusions follow.
 
-The code lives in a private repository. Happy to walk through the work on request. Research with Prof. Le Xie's lab at Harvard, advised by Prof. Benjamin Lee at Penn. Work in progress.
+1. A site like this cannot be run on simple rules. The report's tier design never buys grid power for
+   flexible jobs, so most of the work stalls when solar runs short.
+2. Planning ahead, and declining work that cannot be finished, is what delivers reliable service. The
+   optimizer finishes 5 to 7 points more work than our best rule-based operator, and nothing it
+   accepts is late. Its electricity cost per unit of work is about the same.
+3. The scarce resource is the grid connection, not the energy. Electricity is about 1% of the value
+   of the computing it powers, while one more megawatt of firm grid connection is worth several times
+   what the utility charges for it.
+
+These are simulation results, not measurements from an operating site. The comparison with the
+report's tier design uses our own implementation of it, since the report did not simulate its tiers.
+
+## Next steps
+
+We are finishing the remaining test runs, which vary the size of the grid connection and the battery.
+After that we will price the three service tiers, model how customers choose among them, and study
+how the site could sell its flexibility back to the grid. The work is being written up as a research
+paper.
+
+## About
+
+SolarSprint is a University of Pennsylvania senior design project led by Maanas Goel, carried out
+with Prof. Le Xie's lab at Harvard and advised by Prof. Benjamin Lee at Penn. The code is in a private
+repository, and we are happy to walk through the work on request. Methods, test design, limitations
+and earlier results are described in the [technical notes](docs/technical-notes.md).
