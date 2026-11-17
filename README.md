@@ -28,9 +28,9 @@ recent days. Time steps $`i`$ have length $`L_i`$: hourly for the first 36 hours
 14 days. The objective is the expected cost of running the site plus the value of the work refused:
 
 ```math
-\min \; \frac{1}{|S|} \sum_{s} \Big[ \sum_{i} L_i \big( (\pi_i + \phi)\, g_{is} + w\, d_{is} \big)
- + \lambda \sum_{m} \big( \Gamma_{ms} - \bar{\Gamma}_m \big) + \kappa \sum_{f} u_{fs} \Big]
- + \sum_{j \,\in\, \text{new}} \rho_j E_j (1 - a_j)
+\min \;\; \frac{1}{|S|} \sum_{s} \left[ \, \sum_{i} L_i \big( (\pi_i + \phi)\, g_{is} + w\, d_{is} \big)
+ + \lambda \sum_{m} \big( \Gamma_{ms} - \bar{\Gamma}_m \big) + \kappa \sum_{f} u_{fs} \right]
+ + \sum_{j \in \mathrm{new}} \rho_j\, E_j\, (1 - a_j)
 ```
 
 The first term is grid energy $`g`$ bought at the day-ahead price $`\pi`$ plus the utility's delivery
@@ -41,12 +41,12 @@ The last is the value $`\rho_j`$ lost by refusing the share $`1 - a_j`$ of a new
 $`E_j`$. The plan must satisfy, in every scenario:
 
 ```math
-\begin{aligned}
-\sum_{f} x_{fis} + N_i + c_{is} &= y_{is} + d_{is} + g_{is} && \text{power used = solar + battery + grid} \\
-y_{is} \le \sigma_{is}, \quad 0 \le g_{is} &\le \min(G, \Gamma_{ms}), \quad \sum_{f} x_{fis} + N_i \le C && \text{solar, grid and site limits} \\
-e_{is} = e_{i-1,s} + L_i \big( \eta\, c_{is} &- d_{is} / \eta \big), \quad 0 \le e_{is} \le \bar{E} && \text{battery energy} \\
-\sum_{i' \le k} L_{i'}\, x_{f i' s} + u_{fs} &\ge M_f(k) && \text{flexible work stays on track for its deadlines}
-\end{aligned}
+\begin{array}{ll}
+\displaystyle \sum_{f} x_{fis} + N_i + c_{is} = y_{is} + d_{is} + g_{is} & \quad \text{power used = solar + battery + grid} \\[8pt]
+\displaystyle y_{is} \le \sigma_{is}, \quad 0 \le g_{is} \le \min(G, \Gamma_{ms}), \quad \sum_{f} x_{fis} + N_i \le C & \quad \text{solar, grid and site limits} \\[8pt]
+\displaystyle e_{is} = e_{i-1,s} + L_i \big( \eta\, c_{is} - d_{is} / \eta \big), \quad 0 \le e_{is} \le \bar{E} & \quad \text{battery energy} \\[8pt]
+\displaystyle \sum_{i' \le k} L_{i'}\, x_{f i' s} + u_{fs} \ge M_f(k) & \quad \text{flexible work stays on track for its deadlines}
+\end{array}
 ```
 
 Here $`x_f`$ is the power given to a group of flexible jobs, $`N`$ the power of urgent and standard
